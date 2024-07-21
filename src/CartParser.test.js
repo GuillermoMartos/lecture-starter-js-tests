@@ -60,5 +60,18 @@ describe('All CartParser tests with +65 coverage expected', () => {
   
 	describe('CartParser - integration test', () => {
 	  // Add your integration test here.
+	  test('when invalid card input, parse function throws Validation failed! instance of Error', () => {
+		expect(() => parser.parse(allValidationErrorsCSVFilePath)).toThrow(
+			new Error('Validation failed!')
+		  );
+	  })
+		
+		test('when valid card input, parse function return serialized cart', () => {
+			const cartSerialized = parser.parse(cartCSVFilePath)
+
+			expect(cartSerialized.items).toHaveLength(5)
+			expect(cartSerialized.total).toEqual(400.44)
+		})
+		
 	});
   });
