@@ -1,5 +1,7 @@
 import CartParser from './CartParser';
 import path from 'path'
+import cart from '../samples/cart.json'
+import * as idGenerator from 'uuid';
 
 const cartCSVFilePath = path.join(__dirname, '..', 'samples', 'cart.csv');
 const allValidationErrorsCSVFilePath = path.join(__dirname, '..', 'samples', 'all-validate-errors-cart.csv');
@@ -21,13 +23,23 @@ describe('All CartParser tests with +65 coverage expected', () => {
 	  test('when CSV data input, readFile returns a string from CSV', () => {
 		expect(stringifiedCSV).toContain('Mollis consequat,9.00,3');
 	  });
+	  test('idGenerator v4 function returns a diferent 36 length string each time', () => {
+		const id1= idGenerator.v4();
+		const id2 = idGenerator.v4();
+		  
+		expect(typeof id1).toBe("string")
+		expect(typeof id2).toBe("string")
+		expect(id1).toHaveLength(36)
+		expect(id2).toHaveLength(36)
+		expect(id1).toHaveLength(36)
+		expect(id1).not.toEqual(id2)
+	  });
 		
 	  test('when cart CSV data input has header error, validate function return array with proper type', () => {
 		  const validationsArray = parser.validate(allValidationErrorsCartCSV)
 
 		  expect(validationsArray).toHaveLength(4)
 		  expect(validationsArray[0].type).toEqual('header')
-
 	  });
 		
 	  test('when cart CSV data input has row error, validate function return array with proper type', () => {
@@ -92,6 +104,11 @@ describe('All CartParser tests with +65 coverage expected', () => {
 
 			expect(cartSerialized.items).toHaveLength(5)
 			expect(cartSerialized.total).toEqual(400.44)
+			cartSerialized.items.forEach((item, index) => {
+				expect(item.name).toEqual(cart.items[index].name);
+				expect(item.price).toEqual(cart.items[index].price);
+				expect(item.quantity).toEqual(cart.items[index].quantity);
+  			});
 		})
 	});
   });
