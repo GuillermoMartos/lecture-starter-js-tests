@@ -34,10 +34,27 @@ describe('All CartParser tests with +65 coverage expected', () => {
 	  });
 		
 	  test('when cart CSV data input is ok, validate function return empty array', () => {
-		stringifiedCSV = parser.readFile(cartCSVFilePath);
 		const validationsArray = parser.validate(stringifiedCSV)
 		
 		expect(validationsArray).toHaveLength(0)
+	});
+
+	  test('when a cart line is input, parseLine function return proper item with id', () => {
+		const item = parser.parseLine(stringifiedCSV.split(/\n/)[1])
+		const { id } = item
+
+		expect(typeof id).toBe("string")
+		expect(item).toEqual({"id": id, "name": "Mollis consequat", "price": 9, "quantity": 3})
+	});
+
+	  test('when an array of items is input, calcTotal function return proper total each price * qty', () => {
+		const items1 = [{price: 3, quantity:4}]
+		const items2 = [{price: 3, quantity:4}, {price: 5, quantity:1}]
+		const total = parser.calcTotal(items1)
+		const total2 = parser.calcTotal(items2)
+		  
+		expect(total).toEqual(12)
+		expect(total2).toEqual(17)
 	});
 	});
   
