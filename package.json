@@ -7,7 +7,7 @@
 		"uuid": "^9.0.1"
 	},
 	"scripts": {
-		"test": "react-scripts test --env=jsdom"
+		"test": "react-scripts test --env=jsdom --coverage"
 	},
 	"engines": {
 		"node": ">=16",
