@@ -19,12 +19,21 @@ describe('All CartParser tests with +65 coverage expected', () => {
 		expect(stringifiedCSV).toContain('Mollis consequat,9.00,3');
 	  });
 		
-	  test('when cart CSV data input is ok, validate function return empty array', () => {
+	  test('when cart CSV data input has invalid header, validate function return array with header error', () => {
 		  stringifiedCSV = parser.readFile(cartCSVFilePath);
+		  stringifiedCSV = stringifiedCSV.replace('Product name', 'Upcoming unknown name')
 		  const validationsArray = parser.validate(stringifiedCSV)
-		  
-		  expect(validationsArray).toHaveLength(0)
+
+		  expect(validationsArray).toHaveLength(1)
+		  expect(validationsArray[0].type).toEqual('header')
 	  });
+		
+	  test('when cart CSV data input is ok, validate function return empty array', () => {
+		stringifiedCSV = parser.readFile(cartCSVFilePath);
+		const validationsArray = parser.validate(stringifiedCSV)
+		
+		expect(validationsArray).toHaveLength(0)
+	});
 	});
   
 	describe('CartParser - integration test', () => {
